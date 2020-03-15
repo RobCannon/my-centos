@@ -5,6 +5,8 @@ RUN yum -y install sudo \
     curl \
     wget \
     unzip \
+    bind-utils \
+    traceroute \
     nano \
     python3 \
     openssl
@@ -12,9 +14,19 @@ RUN yum -y install sudo \
 RUN git config --global credential.helper store
 RUN git config --global core.autocrlf false
 
-
+# Add repo locations for powershell, dotnetsdk, azure-cli, gcloud
 RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.repos.d/microsoft.repo
-RUN yum install -y powershell
+RUN rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
+RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc
+RUN sh -c 'echo -e "[azure-cli]\nname=Azure CLI\nbaseurl=https://packages.microsoft.com/yumrepos/azure-cli\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/azure-cli.repo'
+RUN sh -c 'echo -e "[google-cloud-sdk]\nname=Google Cloud SDK\nbaseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el7-x86_64\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg\n       https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg" > /etc/yum.repos.d/azure-cli.repo'
+
+RUN yum install -y \
+    powershell \
+    azure-cli \
+    google-cloud-sdk
+
+# RUN dotnet tool install --global dotnet-outdated
 
 # RUN curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 # RUN chmod +x /usr/local/bin/docker-compose
@@ -33,17 +45,6 @@ RUN unzip $TERRAFORM_FILE
 RUN mv terraform /usr/local/bin/
 RUN rm $TERRAFORM_FILE
 
-# ENV AZ_REPO=$(lsb_release -cs)
-# RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
-#     tee /etc/apt/sources.list.d/azure-cli.list
-# RUN curl -L https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-# RUN curl -o /etc/apt/sources.list.d/microsoft.list https://packages.microsoft.com/config/ubuntu/16.04/prod.list
-# RUN apt-get update
-# RUN apt-get install azure-cli
-
-# RUN rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
-# RUN yum -y install dotnet-sdk-3.1
-# RUN dotnet tool install --global dotnet-outdated
 
 RUN curl -L https://github.com/justjanne/powerline-go/releases/download/v1.15.0/powerline-go-linux-amd64 --output ~/powerline-go
 RUN chmod +x ~/powerline-go
