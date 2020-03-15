@@ -3,44 +3,47 @@ name: Build Centos Image
 # See build results at
 # https://github.com/RobCannon/my-centos/actions
 
-# This workflow is triggered on pushes to the repository.
-on: [push]
-
+# This workflow is triggered on pushes with a version tag to repository.
+on:
+    push:
+        # Sequence of patterns matched against refs/tags
+        tags:
+            - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
 jobs:
-  build:
-    # Job name is Greeting
-    name: Docker Build
+    build:
+        # Job name is Greeting
+        name: Docker Build
 
-    # This job runs on Linux
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-      - name: Docker Build
-        run: docker build -t my-centos .
-      - name: Docker Extract Distribution
-        run: |
-          docker run --name wsl -it -d my-centos
-          docker export --output my-centos.tar wsl
-          docker stop wsl
-          docker rm wsl
-      - name: Create Distribution Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.sha }}
-          release_name: Release ${{ github.sha }}
-          draft: false
-          prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./my-centos.tar
-          asset_name: my-centos.tar
-          asset_content_type: application/z-tar
+        # This job runs on Linux
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+            - name: Docker Build
+              run: docker build -t my-centos .
+            - name: Docker Extract Distribution
+              run: |
+                  docker run --name wsl -it -d my-centos
+                  docker export --output my-centos.tar wsl
+                  docker stop wsl
+                  docker rm wsl
+            - name: Create Distribution Release
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ github.ref }}
+                  release_name: Release ${{ github.ref }}
+                  draft: false
+                  prerelease: false
+            - name: Upload Release Asset
+              id: upload-release-asset
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: ./my-centos.tar
+                  asset_name: my-centos.tar
+                  asset_content_type: application/z-tar
