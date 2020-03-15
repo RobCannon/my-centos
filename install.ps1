@@ -14,5 +14,6 @@ wsl --unregister $DistroName
 wsl --import $DistroName "$env:APPDATA\$DistroName\" ".\$DistroName.tar"
 Set-WslDefaultUser $DistroName $env:USERNAME
 wsl -d $DistroName -u root -- printf '[automount]\nroot = /\noptions = "metadata"' ^> /etc/wsl.conf
+wsl -d $DistroName -u root -- useradd --create-home --shell /bin/bash --groups wheel --password $(openssl passwd -crypt default) $env:USERNAME
 wsl -d $DistroName -- sh -c "`$(curl -fsSL https://github.com/RobCannon/my-centos/raw/master/setup.sh)"
 wsl -d $DistroName

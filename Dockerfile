@@ -3,7 +3,10 @@ FROM centos:7
 RUN yum -y install sudo \
     git \
     curl \
+    wget \
     unzip \
+    nano \
+    python3 \
     openssl
 
 RUN git config --global credential.helper store
@@ -16,9 +19,9 @@ RUN yum install -y powershell
 # RUN curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 # RUN chmod +x /usr/local/bin/docker-compose
 
-# RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-# RUN chmod +x ./kubectl
-# RUN mv ./kubectl /usr/local/bin/kubectl
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+RUN chmod +x ./kubectl
+RUN mv ./kubectl /usr/local/bin/kubectl
 
 # RUN curl -L https://git.io/get_helm.sh | bash
 # RUN helm init --client-only
@@ -48,8 +51,8 @@ RUN mv ~/powerline-go /usr/local/bin/powerline-go
 
 RUN yum clean all
 
-RUN useradd --create-home --shell /bin/bash --groups wheel --password $(openssl passwd -crypt default) rob
+#RUN useradd --create-home --shell /bin/bash --groups wheel --password $(openssl passwd -crypt default) rob
 
-USER rob
+#USER rob
 
 CMD ["bash"]
