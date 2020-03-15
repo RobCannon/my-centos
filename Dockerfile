@@ -41,18 +41,14 @@ RUN rm $TERRAFORM_FILE
 # RUN apt-get update
 # RUN apt-get install azure-cli
 
-# RUN apt-get install -y dotnet-sdk-3.0
-# RUN dotnet tool install --global dotnet-outdated
-
+RUN rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
+RUN yum -y install dotnet-sdk-3.1
+RUN dotnet tool install --global dotnet-outdated
 
 RUN curl -L https://github.com/justjanne/powerline-go/releases/download/v1.15.0/powerline-go-linux-amd64 --output ~/powerline-go
 RUN chmod +x ~/powerline-go
 RUN mv ~/powerline-go /usr/local/bin/powerline-go
 
 RUN yum clean all
-
-#RUN useradd --create-home --shell /bin/bash --groups wheel --password $(openssl passwd -crypt default) rob
-
-#USER rob
 
 CMD ["bash"]
