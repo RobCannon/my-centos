@@ -51,13 +51,11 @@ RUN yum -y install sudo \
 # RUN mv prettyping /usr/local/bin/
 
 
-# RUN curl -L https://github.com/justjanne/powerline-go/releases/download/v1.13.0/powerline-go-linux-amd64 --output ~/powerline-go
-# RUN chmod +x ~/powerline-go
-# RUN mv ~/powerline-go /usr/local/bin/powerline-go
+RUN curl -L https://github.com/justjanne/powerline-go/releases/download/v1.15.0/powerline-go-linux-amd64 --output ~/powerline-go
+RUN chmod +x ~/powerline-go
+RUN mv ~/powerline-go /usr/local/bin/powerline-go
 
-# RUN apt-get -y upgrade
-# RUN apt-get -y autoremove
-# RUN apt-get -y autoclean
+RUN yum clean all
 
 RUN useradd -ms /bin/bash rob
 RUN usermod -aG wheel rob
