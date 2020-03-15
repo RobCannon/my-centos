@@ -1,7 +1,7 @@
 echo ''
 echo '------'
 echo 'Copy .profile'
-curl -L https://github.com/RobCannon/boxstarter/raw/master/profiles/ubuntu/.profile -o ~/.profile
+curl -L https://github.com/RobCannon/my-centos/raw/master/.profile -o ~/.profile
 source ~/.profile
 echo ''
 

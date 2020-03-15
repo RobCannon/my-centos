@@ -49,6 +49,8 @@ RUN curl -L https://github.com/justjanne/powerline-go/releases/download/v1.15.0/
 RUN chmod +x ~/powerline-go
 RUN mv ~/powerline-go /usr/local/bin/powerline-go
 
+RUN hostname WSL
+
 RUN yum clean all
 
 CMD ["bash"]
