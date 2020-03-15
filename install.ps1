@@ -1,4 +1,4 @@
-param( [Parameter(Mandatory=$true)][System.Security.SecureString] $SecurePassword)
+param( [Parameter(Mandatory = $true)][System.Security.SecureString] $SecurePassword)
 
 $ErrorActionPreference = 'Stop'
 
@@ -12,7 +12,7 @@ $PlainTextPassword = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime
 Function Set-WslDefaultUser ($distro, $user) { Get-ItemProperty Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss\*\ DistributionName | Where-Object -Property DistributionName -eq $distro | Set-ItemProperty -Name DefaultUid -Value ((wsl -d $distro -u $user -e id -u) | Out-String); };
 
 docker pull docker.pkg.github.com/robcannon/my-centos/my-centos:master
-docker run --name wsl -it -d docker.pkg.github.com/robcannon/my-centos/my-centos:master
+docker run --name wsl --hostname WSL -it -d docker.pkg.github.com/robcannon/my-centos/my-centos:master
 docker export --output my-centos.tar wsl
 docker stop wsl
 docker rm wsl
