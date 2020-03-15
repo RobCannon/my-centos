@@ -18,16 +18,29 @@ jobs:
         uses: actions/checkout@v2
       - name: Docker Build
         run: docker build -t my-centos .
-      - name: Docker Start Process
-        run: docker run --name wsl -it -d my-centos
-      - name: Docker Export File System
-        run: docker export --output my-centos.tar wsl
-      - name: Docker Stop Process
-        run: docker stop wsl
-      - name: Docker Remove Process
-        run: docker rm wsl
-      - name: Publish WSL Distribution
-        uses: actions/upload-artifact@v1
+      - name: Docker Extract Distribution
+        run: |
+          docker run --name wsl -it -d my-centos
+          docker export --output my-centos.tar wsl
+          docker stop wsl
+          docker rm wsl
+      - name: Create Distribution Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Publish server
-          path: my-centos.tar
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./my-centos.tar
+          asset_name: my-centos.tar
+          asset_content_type: application/z-tar
