@@ -1,4 +1,8 @@
 name: Build Centos Image
+
+# See build results at
+# https://github.com/RobCannon/my-centos/actions
+
 # This workflow is triggered on pushes to the repository.
 on: [push]
 
