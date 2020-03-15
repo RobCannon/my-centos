@@ -8,7 +8,8 @@ $ErrorActionPreference = 'Stop'
 # See build results at
 # https://github.com/RobCannon/my-centos/actions
 
-$PlainTextPassword = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecurePassword))
+$PlainTextPassword = ConvertFrom-SecureString -SecureString $SecurePassword -AsPlainText
+
 Function Set-WslDefaultUser ($distro, $user) { Get-ItemProperty Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss\*\ DistributionName | Where-Object -Property DistributionName -eq $distro | Set-ItemProperty -Name DefaultUid -Value ((wsl -d $distro -u $user -e id -u) | Out-String); };
 
 docker pull docker.pkg.github.com/robcannon/my-centos/my-centos:master
@@ -23,4 +24,5 @@ wsl -d my-centos -u root -- useradd --create-home --shell /bin/bash --groups whe
 
 Set-WslDefaultUser my-centos $env:USERNAME
 wsl -d my-centos -- sh -c "`$(curl -fsSL https://github.com/RobCannon/my-centos/raw/master/setup.sh)"
-wsl -d my-centos
+wsl --setdefault my-centos
+wsl

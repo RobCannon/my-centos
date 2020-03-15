@@ -12,7 +12,18 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: Publish Image
-        uses: matootie/github-docker@v2.2.2
+      - name: Docker Build
+        run: docker build -t my-centos .
+      - name: Docker Start Process
+        run: docker run --name fs -it -d my-centos
+      - name: Docker Export File System
+        run: docker export --output my-centos.tar fs
+      - name: Docker Stop Process
+        run: docker stop wsl
+      - name: Docker Remove Process
+        run: docker rm wsl
+      - name: Publish WSL Distribution
+        uses: actions/upload-artifact@v1
         with:
-          accessToken: ${{ secrets.GITHUB_TOKEN }}
+          name: Publish server
+          path: my-centos.tar
