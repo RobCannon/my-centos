@@ -19,9 +19,9 @@ jobs:
       - name: Docker Build
         run: docker build -t my-centos .
       - name: Docker Start Process
-        run: docker run --name fs -it -d my-centos
+        run: docker run --name wsl -it -d my-centos
       - name: Docker Export File System
-        run: docker export --output my-centos.tar fs
+        run: docker export --output my-centos.tar wsl
       - name: Docker Stop Process
         run: docker stop wsl
       - name: Docker Remove Process
