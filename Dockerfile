@@ -4,9 +4,13 @@ RUN yum -y install sudo \
     git \
     curl \
     wget \
-    unzip \
+    telnet \
+    ftp \
     bind-utils \
     traceroute \
+    zip \
+    unzip \
+    jq \
     nano \
     python3 \
     openssl
