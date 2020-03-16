@@ -4,21 +4,21 @@ FROM centos:7
 # https://github.com/actions/virtual-environments/blob/master/images/linux/Ubuntu1804-README.md
 
 RUN yum -y install sudo \
-    git \
-    curl \
-    wget \
-    telnet \
-    ftp \
-    bind-utils \
-    traceroute \
-    zip \
-    unzip \
-    openssl \
-    jq \
-    nano \
-    python3 \
-    ansible \
-    docker-ce-cli
+  git \
+  curl \
+  wget \
+  telnet \
+  ftp \
+  bind-utils \
+  traceroute \
+  zip \
+  unzip \
+  openssl \
+  jq \
+  nano \
+  python3 \
+  ansible \
+  docker-ce-cli
 
 RUN git config --global credential.helper store
 RUN git config --global core.autocrlf false
@@ -79,13 +79,13 @@ RUN curl -s -LO https://get.helm.sh/$HELM_FILE && \
   rm $HELM_FILE
 
 # https://github.com/istio/istio/releases
-# ARG ISTIO_VERSION=1.5.0
-# ARG ISTIO_FILE="istioctl-${ISTIO_VERSION}-linux.tar.gz"
-# RUN curl -s -LO "https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/${ISTIO_FILE}" && \
-#   tar -xvzf $ISTIO_FILE "istio-${ISTIO_VERSION}-linux/bin/istioctl" --strip-components 2 && \
-#   chmod a+x istioctl && \
-#   mv istioctl /usr/local/bin/istioctl && \
-#   rm $ISTIO_FILE
+ARG ISTIO_VERSION=1.5.0
+ARG ISTIO_FILE="istioctl-${ISTIO_VERSION}-linux.tar.gz"
+RUN curl -s -LO "https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/${ISTIO_FILE}" && \
+  tar -xvzf $ISTIO_FILE && \
+  chmod a+x istioctl && \
+  mv istioctl /usr/local/bin/istioctl && \
+  rm $ISTIO_FILE
 
 # https://github.com/justjanne/powerline-go/releases
 ARG POWERLINE_GO_VERSION=1.15.0
