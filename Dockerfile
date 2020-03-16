@@ -79,13 +79,13 @@ RUN curl -s -LO https://get.helm.sh/$HELM_FILE && \
   rm $HELM_FILE
 
 # https://github.com/istio/istio/releases
-ARG ISTIO_VERSION=1.5.0
-ARG ISTIO_FILE="istio-${ISTIO_VERSION}-asm.0-linux.tar.gz"
-RUN curl -s -LO "https://storage.googleapis.com/gke-release/asm/${ISTIO_FILE}" && \
-  tar -xvzf $ISTIO_FILE "istio-${ISTIO_VERSION}-asm.0/bin/istioctl" --strip-components 2 && \
-  chmod a+x istioctl && \
-  mv istioctl /usr/local/bin/istioctl && \
-  rm $ISTIO_FILE
+# ARG ISTIO_VERSION=1.5.0
+# ARG ISTIO_FILE="istioctl-${ISTIO_VERSION}-linux.tar.gz"
+# RUN curl -s -LO "https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/${ISTIO_FILE}" && \
+#   tar -xvzf $ISTIO_FILE "istio-${ISTIO_VERSION}-linux/bin/istioctl" --strip-components 2 && \
+#   chmod a+x istioctl && \
+#   mv istioctl /usr/local/bin/istioctl && \
+#   rm $ISTIO_FILE
 
 # https://github.com/justjanne/powerline-go/releases
 ARG POWERLINE_GO_VERSION=1.15.0
