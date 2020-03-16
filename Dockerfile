@@ -37,13 +37,6 @@ RUN yum install -y \
 
 # RUN dotnet tool install --global dotnet-outdated
 
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-  unzip awscliv2.zip && \
-  ./aws/install && \
-  chmod 755 -R /usr/local/aws-cli && \
-  rm awscliv2.zip && \
-  rm -rf aws
-
 # RUN curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 # RUN chmod +x /usr/local/bin/docker-compose
 
@@ -68,7 +61,6 @@ RUN curl -s -LO "https://releases.hashicorp.com/packer/${PACKER_VERSION}/${PACKE
   sudo mv packer /usr/local/bin/packer && \
   rm $PACKER_FILE
 
-
 # https://github.com/helm/helm/releases
 ARG HELM_VERSION=3.1.2
 ARG HELM_FILE="helm-v${HELM_VERSION}-linux-amd64.tar.gz"
@@ -92,6 +84,17 @@ ARG POWERLINE_GO_VERSION=1.15.0
 RUN curl -L "https://github.com/justjanne/powerline-go/releases/download/v${POWERLINE_GO_VERSION}/powerline-go-linux-amd64" --output ~/powerline-go && \
   chmod +x ~/powerline-go && \
   mv ~/powerline-go /usr/local/bin/powerline-go
+
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" --output "awscliv2.zip" && \
+  unzip awscliv2.zip && \
+  ./aws/install && \
+  chmod 755 -R /usr/local/aws-cli && \
+  rm awscliv2.zip && \
+  rm -rf aws
+
+RUN curl "https://amazon-eks.s3-us-west-2.amazonaws.com/1.15.10/2020-02-22/bin/linux/amd64/aws-iam-authenticator" --output aws-iam-authenticator && \
+  chmod a+x aws-iam-authenticator && \
+  mv aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
 
 RUN yum clean all
 
