@@ -30,5 +30,5 @@ Set-WslDefaultUser my-centos $env:USERNAME
 wsl --setdefault my-centos
 
 Write-Host "Running personalization"
-wsl -- sh -c "`$(curl -fsSL https://github.com/RobCannon/my-centos/raw/master/setup.sh)"
+wsl -- sh -c "`$(curl -fsSL https://github.com/RobCannon/my-centos/raw/master/boxstarter.sh)"
 wsl
