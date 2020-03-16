@@ -51,6 +51,7 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s
   chmod +x ./kubectl && \
   mv ./kubectl /usr/local/bin/kubectl
 
+# https://github.com/hashicorp/terraform/releases
 ARG TERRAFORM_VERSION=0.12.23
 ARG TERRAFORM_FILE="terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
 RUN curl -LO "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/${TERRAFORM_FILE}" && \
@@ -58,6 +59,7 @@ RUN curl -LO "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/${TE
   mv terraform /usr/local/bin/ && \
   rm $TERRAFORM_FILE
 
+# https://packer.io/downloads.html
 ARG PACKER_VERSION=1.5.4
 ARG PACKER_FILE="packer_${PACKER_VERSION}_linux_amd64.zip"
 RUN curl -s -LO "https://releases.hashicorp.com/packer/${PACKER_VERSION}/${PACKER_FILE}" && \
@@ -67,7 +69,8 @@ RUN curl -s -LO "https://releases.hashicorp.com/packer/${PACKER_VERSION}/${PACKE
   rm $PACKER_FILE
 
 
-ARG HELM_VERSION=3.1.1
+# https://github.com/helm/helm/releases
+ARG HELM_VERSION=3.1.2
 ARG HELM_FILE="helm-v${HELM_VERSION}-linux-amd64.tar.gz"
 RUN curl -s -LO https://get.helm.sh/$HELM_FILE && \
   tar -xvzf $HELM_FILE linux-amd64/helm --strip-components 1 && \
@@ -75,7 +78,8 @@ RUN curl -s -LO https://get.helm.sh/$HELM_FILE && \
   mv helm /usr/local/bin/helm && \
   rm $HELM_FILE
 
-ARG ISTIO_VERSION=1.4.4
+# https://github.com/istio/istio/releases
+ARG ISTIO_VERSION=1.5.0
 ARG ISTIO_FILE="istio-${ISTIO_VERSION}-asm.0-linux.tar.gz"
 RUN curl -s -LO "https://storage.googleapis.com/gke-release/asm/${ISTIO_FILE}" && \
   tar -xvzf $ISTIO_FILE "istio-${ISTIO_VERSION}-asm.0/bin/istioctl" --strip-components 2 && \
@@ -83,6 +87,7 @@ RUN curl -s -LO "https://storage.googleapis.com/gke-release/asm/${ISTIO_FILE}" &
   mv istioctl /usr/local/bin/istioctl && \
   rm $ISTIO_FILE
 
+# https://github.com/justjanne/powerline-go/releases
 ARG POWERLINE_GO_VERSION=1.15.0
 RUN curl -L "https://github.com/justjanne/powerline-go/releases/download/v${POWERLINE_GO_VERSION}/powerline-go-linux-amd64" --output ~/powerline-go && \
   chmod +x ~/powerline-go && \
