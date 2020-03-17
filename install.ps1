@@ -14,12 +14,14 @@ Function Set-WslDefaultUser ($distro, $user) { Get-ItemProperty Registry::HKEY_C
 
 $distributionUri = Invoke-RestMethod -uri  https://api.github.com/repos/RobCannon/my-centos/releases/latest | Select-Object -ExpandProperty assets | Select-Object -expand browser_download_url
 Write-Host "Downloading release from $distributionUri"
-Invoke-WebRequest $distributionUri -OutFile .\my-centos.tar -UseBasicParsing
+Invoke-WebRequest $distributionUri -OutFile .\my-centos.tar.gz -UseBasicParsing
+gzip.exe --decompress .\my-centos.tar.gz
 
 Write-Host "Registering distribution"
 wsl --unregister my-centos
 wsl --import my-centos "$env:APPDATA\my-centos\" .\my-centos.tar
 Remove-Item .\my-centos.tar
+Remove-Item .\my-centos.tar.gz
 
 Write-Host "Setting up user"
 wsl -d my-centos -u root -- printf '[automount]\nroot = /\noptions = "metadata"' ^> /etc/wsl.conf
