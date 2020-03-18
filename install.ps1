@@ -15,7 +15,7 @@ Function Set-WslDefaultUser ($distro, $user) { Get-ItemProperty Registry::HKEY_C
 $distributionUri = Invoke-RestMethod -uri  https://api.github.com/repos/RobCannon/my-centos/releases/latest | Select-Object -ExpandProperty assets | Select-Object -expand browser_download_url
 Write-Host "Downloading release from $distributionUri"
 Invoke-WebRequest $distributionUri -OutFile .\my-centos.tar.gz -UseBasicParsing
-7z.exe x -bd .\my-centos.tar.gz
+7z.exe x -bd -y .\my-centos.tar.gz
 
 Write-Host "Registering distribution"
 wsl --unregister my-centos

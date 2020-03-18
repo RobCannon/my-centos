@@ -79,6 +79,7 @@ alias tfp='terraform plan'
 alias tfa='terraform apply -auto-approve'
 alias tfws='terraform workspace select'
 alias tff='terraform fmt -recursive'
+alias tfo='terraform output'
 
 alias dockerclean='docker kill $(docker ps -q) || true && docker rm $(docker ps -a -q) || true && docker rmi $(docker images -q -f dangling=true)'
 alias dockercleanall='docker kill $(docker ps -q) || true && docker rm $(docker ps -a -q) || true && docker rmi $(docker images -q)'
