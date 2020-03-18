@@ -18,18 +18,20 @@ Invoke-WebRequest $distributionUri -OutFile .\my-centos.tar.gz -UseBasicParsing
 7z.exe x -bd -y .\my-centos.tar.gz
 
 Write-Host "Registering distribution"
-wsl --unregister my-centos
-wsl --import my-centos "$env:APPDATA\my-centos\" .\my-centos.tar
+if ($(wsl.exe --list) -contains 'my-centos') {
+  wsl.exe --unregister my-centos
+}
+wsl.exe --import my-centos "$env:APPDATA\my-centos\" .\my-centos.tar
 Remove-Item .\my-centos.tar
 Remove-Item .\my-centos.tar.gz
 
 Write-Host "Setting up user"
-wsl -d my-centos -u root -- printf '[automount]\nroot = /\noptions = "metadata"' ^> /etc/wsl.conf
-wsl -d my-centos -u root -- useradd --create-home --shell /bin/bash --groups wheel --password $(wsl -d my-centos -u root -- openssl passwd -crypt $PlainTextPassword) $env:USERNAME
-wsl --terminate my-centos
+wsl.exe -d my-centos -u root -- printf '[automount]\nroot = /\noptions = "metadata"' ^> /etc/wsl.conf
+wsl.exe -d my-centos -u root -- useradd --create-home --shell /bin/bash --groups wheel --password $(wsl -d my-centos -u root -- openssl passwd -crypt $PlainTextPassword) $env:USERNAME
+wsl.exe --terminate my-centos
 
 Set-WslDefaultUser my-centos $env:USERNAME
-wsl --setdefault my-centos
+wsl.exe --setdefault my-centos
 
 Write-Host "Running personalization"
 wsl -- sh -c "`$(curl -fsSL https://github.com/RobCannon/my-centos/raw/master/boxstarter.sh)"
