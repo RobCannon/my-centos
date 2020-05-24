@@ -80,18 +80,16 @@ RUN curl -s -LO https://get.helm.sh/$HELM_FILE && \
   rm $HELM_FILE
 
 # https://github.com/istio/istio/releases
-ARG ISTIO_VERSION=1.5.0
-ARG ISTIO_FILE="istioctl-${ISTIO_VERSION}-linux.tar.gz"
-RUN curl -s -LO "https://github.com/istio/istio/releases/download/${ISTIO_VERSION}/${ISTIO_FILE}" && \
-  tar -xvzf $ISTIO_FILE && \
+RUN curl -LO $(curl -s https://api.github.com/repos/istio/istio/releases/latest | jq -r '.assets[] | select(.name | test("^istioctl-\\d+\\.\\d+\\.\\d+-linux-amd64\\.tar\\.gz$")) | .browser_download_url') && \
+  tar -xvzf $(curl -s https://api.github.com/repos/istio/istio/releases/latest | jq -r '.assets[] | select(.name | test("^istioctl-\\d+\\.\\d+\\.\\d+-linux-amd64\\.tar\\.gz$")) | .name') && \
   chmod a+x istioctl && \
   mv istioctl /usr/local/bin/istioctl && \
-  rm $ISTIO_FILE
+  rm $(curl -s https://api.github.com/repos/istio/istio/releases/latest | jq -r '.assets[] | select(.name | test("^istioctl-\\d+\\.\\d+\\.\\d+-linux-amd64\\.tar\\.gz$")) | .name')
 
 # https://github.com/justjanne/powerline-go/releases
 RUN curl -LO $(curl -s https://api.github.com/repos/justjanne/powerline-go/releases/latest | jq -r '.assets[] | select(.name == "powerline-go-linux-amd64") | .browser_download_url' ) && \
-  chmod +x ~/powerline-go-linux-amd64 && \
-  mv ~/powerline-go-linux-amd64 /usr/local/bin/powerline-go
+  chmod +x powerline-go-linux-amd64 && \
+  mv powerline-go-linux-amd64 /usr/local/bin/powerline-go
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" --output "awscliv2.zip" && \
   unzip awscliv2.zip && \
