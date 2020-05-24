@@ -14,26 +14,35 @@ RUN yum -y install sudo \
   zip \
   unzip \
   openssl \
+  gcc-c+_ \
+  make \
   jq \
   nano \
   python3 \
   ansible \
   docker-ce-cli
 
-RUN git config --global credential.helper store
-RUN git config --global core.autocrlf false
-
-# Add repo locations for powershell, dotnetsdk, azure-cli, gcloud
-RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.repos.d/microsoft.repo; \
+# Add repo locations for git, powershell, dotnetsdk, azure-cli, gcloud, nodejs
+RUN sudo yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-repo-1.7-1.x86_64.rpm \
+  curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.repos.d/microsoft.repo; \
   rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm; \
   rpm --import https://packages.microsoft.com/keys/microsoft.asc; \
   sh -c 'echo -e "[azure-cli]\nname=Azure CLI\nbaseurl=https://packages.microsoft.com/yumrepos/azure-cli\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/azure-cli.repo'; \
-  sh -c 'echo -e "[google-cloud-sdk]\nname=Google Cloud SDK\nbaseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el7-x86_64\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg\n       https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg" > /etc/yum.repos.d/azure-cli.repo'
+  sh -c 'echo -e "[google-cloud-sdk]\nname=Google Cloud SDK\nbaseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el7-x86_64\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg\n       https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg" > /etc/yum.repos.d/azure-cli.repo' \
+  curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash -
 
 RUN yum install -y \
+  git \
   powershell \
   azure-cli \
-  google-cloud-sdk
+  google-cloud-sdk \
+  nodejs
+
+RUN git config --global credential.helper store
+RUN git config --global core.autocrlf false
+
+
+RUN npm install -g cdk8s-cli
 
 # RUN dotnet tool install --global dotnet-outdated
 

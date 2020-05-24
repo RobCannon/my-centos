@@ -73,7 +73,7 @@ alias kru='k rollout undo'
 alias kl='k logs'
 
 # Terraform aliases
-alias tfi='export http_proxy=http://172.25.49.99:3128; export https_proxy=http://172.25.49.99:3128; export no_proxy=*.googleapis.com; terraform init; unset http_proxy; unset https_proxy; unset no_proxy'
+alias tfi='terraform init -upgrade=false'
 alias tfv='terraform validate'
 alias tfp='terraform plan'
 alias tfa='terraform apply -auto-approve'
@@ -90,7 +90,6 @@ alias dockerkillall='docker kill $(docker ps -q) || true && docker rm $(docker p
 
 export PATH=$PATH:$HOME/.dotnet/tools
 
-export DOCKER_HOST=tcp://localhost:2375
 export KUBECONFIG=$HOME/.kube/config
 
 if [ -d $USERPROFILE/scoop/apps/ssh-agent-wsl/2.5 ]; then
@@ -104,6 +103,3 @@ function _update_ps1() {
 if [ "$TERM" != "linux" ] && [ -f "/usr/local/bin/powerline-go" ]; then
     PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
 fi
-
-alias enable-proxy='export http_proxy=http://172.25.49.99:3128; export https_proxy=http://172.25.49.99:3128; export no_proxy=*.googleapis.com'
-alias disable-proxy='unset http_proxy; unset https_proxy; unset no_proxy'
