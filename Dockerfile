@@ -4,7 +4,6 @@ FROM centos:7
 # https://github.com/actions/virtual-environments/blob/master/images/linux/Ubuntu1804-README.md
 
 RUN yum -y install sudo \
-  git \
   curl \
   wget \
   telnet \
@@ -16,15 +15,15 @@ RUN yum -y install sudo \
   openssl \
   gcc-c+_ \
   make \
-  jq \
   nano \
   python3 \
   ansible \
   docker-ce-cli
 
-# Add repo locations for git, powershell, dotnetsdk, azure-cli, gcloud, nodejs
-RUN sudo yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-repo-1.7-1.x86_64.rpm; \
-  curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.repos.d/microsoft.repo; \
+# Add repo locations for git, jq powershell, dotnetsdk, azure-cli, gcloud, nodejs
+RUN sudo yum -y remove git; \
+  sudo yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-repo-1.7-1.x86_64.rpm; \
+  sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm; \
   rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm; \
   rpm --import https://packages.microsoft.com/keys/microsoft.asc; \
   sh -c 'echo -e "[azure-cli]\nname=Azure CLI\nbaseurl=https://packages.microsoft.com/yumrepos/azure-cli\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/azure-cli.repo'; \
@@ -33,6 +32,7 @@ RUN sudo yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-
 
 RUN yum install -y \
   git \
+  jq \
   powershell \
   azure-cli \
   google-cloud-sdk \
@@ -89,10 +89,9 @@ RUN curl -s -LO "https://github.com/istio/istio/releases/download/${ISTIO_VERSIO
   rm $ISTIO_FILE
 
 # https://github.com/justjanne/powerline-go/releases
-ARG POWERLINE_GO_VERSION=1.15.0
-RUN curl -L "https://github.com/justjanne/powerline-go/releases/download/v${POWERLINE_GO_VERSION}/powerline-go-linux-amd64" --output ~/powerline-go && \
-  chmod +x ~/powerline-go && \
-  mv ~/powerline-go /usr/local/bin/powerline-go
+RUN curl -LO $(curl -s https://api.github.com/repos/justjanne/powerline-go/releases/latest | jq -r '.assets[] | select(.name == "powerline-go-linux-amd64") | .browser_download_url' ) && \
+  chmod +x ~/powerline-go-linux-amd64 && \
+  mv ~/powerline-go-linux-amd64 /usr/local/bin/powerline-go
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" --output "awscliv2.zip" && \
   unzip awscliv2.zip && \
