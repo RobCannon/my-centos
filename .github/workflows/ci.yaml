@@ -6,9 +6,6 @@ name: Build Centos Image
 # This workflow is triggered on pushes with a version tag to repository.
 on:
   push:
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
   schedule:
     - cron: '8 0 * * 6'
 jobs:
@@ -30,14 +27,18 @@ jobs:
           docker stop wsl
           docker rm wsl
           gzip my-centos.tar
+      - name: Update Tags
+        id: update-tags
+        shell: pwsh
+        run: ./.github/scripts/update-tags.ps1
       - name: Create Distribution Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ steps.update-tags.outputs.tag }}
+          release_name: Release ${{ steps.update-tags.outputs.tag }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
