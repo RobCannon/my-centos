@@ -4,8 +4,8 @@ FROM centos:7
 # https://github.com/actions/virtual-environments/blob/master/images/linux/Ubuntu1804-README.md
 
 COPY install-tools.sh ./install-tools.sh
-RUN chmod +x ./install-tools.sh \
-  ./install-tools.sh \
+RUN chmod +x ./install-tools.sh && \
+  ./install-tools.sh && \
   rm ./install-tools.sh
 
 CMD ["bash"]
