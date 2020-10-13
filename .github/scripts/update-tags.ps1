@@ -1,14 +1,15 @@
 #!/bin/pwsh
 param (
-  $MajorVersion = '1'
+  $Version = '1.1'
 )
 
 git config user.email "github@cannonsoftware.com"
 git config user.name "GitHub Action"
 
-$versions = $(git tag) | ?{ $_ -match "^v$MajorVersion\.\d+" } | %{ [Version]($_ -replace 'v','') }
+$versions = $(git tag) | ?{ $_ -match "^v$Version\.\d+" } | %{ [Version]($_ -replace 'v','') }
 $max_version = $versions | Measure-Object -Maximum | % Maximum
-$next_version = $max_version ? [Version]::new($max_version.Major, $max_version.Minor + 1) : [Version]::new($MajorVersion,0)
+if (-Not $max_version) { $Max_version = [Version]::new($Version) }
+$next_version = [Version]::new($max_version.Major, $max_version.Minor, $max_version.Build + 1)
 
 $tag = "v$($next_version.ToString())"
 
