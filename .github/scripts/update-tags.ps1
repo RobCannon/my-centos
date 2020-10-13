@@ -5,6 +5,7 @@ param (
 
 git config user.email "github@cannonsoftware.com"
 git config user.name "GitHub Action"
+git fetch --tags
 
 $versions = $(git tag) | ?{ $_ -match "^v$Version\.\d+" } | %{ [Version]($_ -replace 'v','') }
 $max_version = $versions | Measure-Object -Maximum | % Maximum
