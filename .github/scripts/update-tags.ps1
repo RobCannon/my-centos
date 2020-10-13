@@ -18,4 +18,4 @@ Write-Host "Adding $tag"
 git tag -a $tag -m $tag -f
 git push origin $tag
 
-Write-Output "::set-output name=tag=::$tag"
+Write-Output "::set-output name=tag::$tag"
