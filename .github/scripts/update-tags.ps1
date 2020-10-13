@@ -13,6 +13,6 @@ Write-Host "Setting tag for $tag"
 # Add the new tag
 Write-Host "Adding $tag"
 git tag -a $tag -m $tag -f
-git push origin $tag
+git -c user.name='GitHubAction' -c user.email='my@email.org' push origin $tag
 
 Write-Output "::set-output name=tag=::$tag"
